@@ -30,4 +30,34 @@ function buildTable(data) {
     );
   });
 }
-}
+
+
+// create new function to filter by date when user clicks button
+function handleClick(){
+    //.select will select the first element that matches out selector string of #datetime
+    // By chaining .property("value"); to the d3.select function, we're telling D3 not only to look for where our date values are stored on the webpage, 
+    // but to actually grab that information and hold it in the "date" variable.
+    let date = d3.select("#datetime").property("value");
+
+    // set a default filter and save it to a new variable
+    // by setting the filteres data to our raw data, we're using it as a blank slate
+    // if no date is entered as a filter, all of the data will be returned when someone clicks the button
+    let filteredData = tableData;
+
+    // if statement to check if a date is entered and to match the entered date to the #datetime value
+    if (date) {
+        filteredData = filteredData.filter(row => row.datetime === date);
+    };
+
+    // Rebuild the table using the filtered data
+    // @NOTE: If no date was entered, then filteredData will
+    // just be the original tableData.
+    buildTable(filteredData);
+};
+
+//event listener to know WHEN a button is clicked.  handleClick tells what to do when it's clicked, this alerts that a click has happened
+// and telling it to execute the handleClick function
+d3.selectAll("#filter-btn").on("click", handleClick);
+
+// code to make sure the table loads as soon as the page does
+buildTable(tableData);
